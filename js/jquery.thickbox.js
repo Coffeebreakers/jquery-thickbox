@@ -100,7 +100,7 @@ function tb_show(caption, url, imageGroup, pos) {//function called when the user
                         }
                     } else {
                         TB_FoundURL = true;
-                        TB_imageCount = "Image " + (TB_Counter + 1) +" of "+ (TB_TempArray.length);                                         
+                        TB_imageCount = "Image " + (TB_Counter + 1) +" of "+ (TB_TempArray.length);
                     }
                 }
             }
@@ -150,11 +150,11 @@ function tb_show(caption, url, imageGroup, pos) {//function called when the user
                 $("#TB_prev").click(goPrev);
             }
             
-            if (!(TB_NextHTML === "")) {        
+            if (!(TB_NextHTML === "")) {
                 function goNext(){
                     $("#TB_window").remove();
                     $("body").append("<div id='TB_window'></div>");
-                    tb_show(TB_NextCaption, TB_NextURL, imageGroup);                
+                    tb_show(TB_NextCaption, TB_NextURL, imageGroup);
                     return false;   
                 }
                 $("#TB_next").click(goNext);
@@ -200,7 +200,7 @@ function tb_show(caption, url, imageGroup, pos) {//function called when the user
             ajaxContentW = TB_WIDTH - 30;
             ajaxContentH = TB_HEIGHT - 45;
             
-            if(url.indexOf('TB_iframe') != -1){// either iframe or ajax window      
+            if(url.indexOf('TB_iframe') != -1){// either iframe or ajax window
                     urlNoQuery = url.split('&TB_');
                     $("#TB_iframeContent").remove();
                     if(params['modal'] != "true"){//iframe no modal
@@ -225,7 +225,7 @@ function tb_show(caption, url, imageGroup, pos) {//function called when the user
                     }
 
             }
-                    
+
                 $("#TB_closeWindowButton").click(tb_remove);
 
                 if(url.indexOf('TB_inline') != -1){ 
@@ -256,7 +256,7 @@ function tb_show(caption, url, imageGroup, pos) {//function called when the user
         }
 
         if(!params['modal']){
-            document.onkeyup = function(e){     
+            document.onkeyup = function(e){
                 if (e == null) { // ie
                     keycode = event.keyCode;
                 } else { // mozilla
@@ -386,7 +386,7 @@ function tb_waiting() {
         $('#TB_window').remove();
     } else {
         TB_HEIGHT = 100;
-        TB_WIDTH = 200;
+        TB_WIDTH = 500;
     }
     var div_wait_msg = $('<div id="TB_ajaxContent" />').append('<p>Aguarde</p>');
     var div_wait_window = $('<div  id="TB_window" />').append(div_wait_msg);
@@ -411,4 +411,3 @@ function tb_waiting() {
     $('#TB_window').show();
     tb_position(null);
 }
-
