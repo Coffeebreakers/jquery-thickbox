@@ -268,13 +268,11 @@ function tb_show(caption, url, imageGroup, pos) {//function called when the user
             };
         }
         
-    } catch(e) {
-        //nothing here
-    }
+    } catch(e) { /*nothing here*/}
     
-    if(parent) {
-        parent.scrollTo(0,0);
-    }
+    //if(parent) {
+        //parent.scrollTo(0,0);
+    //}
 }
 
 //helper functions below
@@ -311,31 +309,69 @@ function tb_remove(callback) {
 }
 
 function tb_position(p) {
-$("#TB_window").css({marginLeft: '-' + parseInt((TB_WIDTH / 2),10) + 'px', width: TB_WIDTH + 'px'});
+    $("#TB_window").css({marginLeft: '-' + parseInt((TB_WIDTH / 2),10) + 'px', width: TB_WIDTH + 'px'});
     if ( !(jQuery.browser.msie && jQuery.browser.version < 7)) { // take away IE6
 
         var space = 10;
-        if (parent.Painel !== undefined) { // verifica se está dentro de um frame
+        document.domain = "uol.com.br";
+        if (parent.length > 0) { // verifica se está dentro de um frame
 
-            if(jQuery.browser.msie && jQuery.browser.version <= 8){
-                var parentIframe = parseInt(top.window.frames['cloud-computing'].screenTop,10) -  top.window.screenTop;
-            }else{
-                var parentIframe = top.document.getElementById('cloud-computing').offsetTop;//.offsetTop;
+            // deslocamento do iframe no pai em relação ao topo
+            try {
+                if(jQuery.browser.msie && jQuery.browser.version <= 8){
+                    if (typeof top.window.frames['office-desktop'] === "object") {
+                        iframeFather = 'office-desktop';
+                    } else if (typeof top.window.frames['email-bpos'] === "object") {
+                        iframeFather = 'email-bpos';
+                    } else if (typeof top.window.frames['cloud-computing'] === "object") {
+                        iframeFather = 'cloud-computing';
+                    } else {
+                        iframeFather = 'mainContainer';
+                    }
+
+                    var parentIframe = parseInt(top.window.frames[iframeFather].screenTop,10) - top.window.screenTop;
+                }else{
+                    if (top.document.getElementById('office-desktop')) {
+                        iframeFather = 'office-desktop';
+                    } else if (top.document.getElementById('email-bpos')) {
+                        iframeFather = 'email-bpos';
+                    } else if (top.document.getElementById('cloud-computing')) {
+                        iframeFather = 'cloud-computing';
+                    } else {
+                        iframeFather = 'mainContainer';
+                    }
+                        var parentIframe = top.document.getElementById(iframeFather).offsetTop;//.offsetTop;
+                }
+            } catch(e) {
+                parentIframe = 0;
             }
-            
+
+            // valor do deslocamento do pai em relação ao topo
             var pos = top.window.pageYOffset || top.document.documentElement.scrollTop || top.document.body.scrollTop;
             pos = pos - parentIframe;
-            
+
+            // área visivel 
             var wh = top.window.innerHeight || window.top.document.documentElement.clientHeight;
 
-            if (wh >= TB_HEIGHT) {
-                space = parseInt((wh - TB_HEIGHT) / 2 ,10)
-            };
+            // altura do iframe
+            var iframeHeight = document.getElementsByTagName("html")[0].offsetHeight;
 
-            if(pos + space > 0 ){
+            // espaço visual a ser deslocado
+            if (wh >= TB_HEIGHT) {
+                space = parseInt((wh - TB_HEIGHT) / 2 ,10);
+            }
+
+            // deslocamento logico dentro do iframe
+            if (pos + space > 0 ) {
                 pos += space;
             } else {
                 pos = 10;
+            }
+
+            // posiciona o modal corretamente, caso deslocamento + altura do modal for maior que a área útil do iframe
+            if (parent && pos+TB_HEIGHT > iframeHeight) {
+                pos = iframeHeight - TB_HEIGHT - 10;
+                //parent.scrollTo(0,pos);
             }
 
             $("#TB_window").css({/*marginTop: '-' + parseInt((TB_HEIGHT / 2),10) + 'px',*/ top:pos +'px'});
@@ -344,9 +380,9 @@ $("#TB_window").css({marginLeft: '-' + parseInt((TB_WIDTH / 2),10) + 'px', width
         };
 
 
-        $('html, body').animate({
-            scrollTop: $("#wrapper").offset().top
-        }, 500);
+        // $('html, body').animate({
+        //     scrollTop: $("#wrapper").offset().top
+        // }, 500);
     }
 }
 
