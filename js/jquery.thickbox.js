@@ -62,22 +62,24 @@ function tb_show(caption, url, imageGroup, pos) {
 			$("#TB_overlay").addClass("TB_overlayBG");//use background and opacity
 		}
 
-		if (caption === null) {caption = "";}
+		if (caption === null) {
+			caption = "";
+		}
 		//hack
 		$("body").append("<div id='TB_load' style='background:url(" + imgLoader.src + ") center center no-repeat;'></div>");//add loader to the page
 		$('#TB_load').show();//show loader
 
 		var baseURL;
-		if (url.indexOf("?")!==-1) { //ff there is a query string involved
+		if (url.indexOf("?") !== -1) { //ff there is a query string involved
 			baseURL = url.substr(0, url.indexOf("?"));
 		} else {
 			baseURL = url;
 		}
 
-		var urlString = /\.jpg$|\.jpeg$|\.png$|\.gif$|\.bmp$/;
-		var urlType = baseURL.toLowerCase().match(urlString);
+		var urlString = /\.jpg$|\.jpeg$|\.png$|\.gif$|\.bmp$/,
+			urlType = baseURL.toLowerCase().match(urlString);
 
-		if (urlType == '.jpg' || urlType == '.jpeg' || urlType == '.png' || urlType == '.gif' || urlType == '.bmp') {//code to show images
+		if (urlType === '.jpg' || urlType === '.jpeg' || urlType === '.png' || urlType === '.gif' || urlType === '.bmp') {//code to show images
 
 			TB_PrevCaption = "";
 			TB_PrevURL = "";
@@ -88,10 +90,10 @@ function tb_show(caption, url, imageGroup, pos) {
 			TB_imageCount = "";
 			TB_FoundURL = false;
 			if (imageGroup) {
-				TB_TempArray = $("a[@rel="+imageGroup+"]").get();
+				TB_TempArray = $("a[@rel=" + imageGroup + "]").get();
 				for (TB_Counter = 0; ((TB_Counter < TB_TempArray.length) && (TB_NextHTML === "")); TB_Counter++) {
 					var urlTypeTemp = TB_TempArray[TB_Counter].href.toLowerCase().match(urlString);
-					if (!(TB_TempArray[TB_Counter].href == url)) {
+					if (!(TB_TempArray[TB_Counter].href === url)) {
 						if (TB_FoundURL) {
 							TB_NextCaption = TB_TempArray[TB_Counter].title;
 							TB_NextURL = TB_TempArray[TB_Counter].href;
@@ -103,7 +105,7 @@ function tb_show(caption, url, imageGroup, pos) {
 						}
 					} else {
 						TB_FoundURL = true;
-						TB_imageCount = "Image " + (TB_Counter + 1) +" of "+ (TB_TempArray.length);
+						TB_imageCount = "Image " + (TB_Counter + 1) + " of " + (TB_TempArray.length);
 					}
 				}
 			}
@@ -113,11 +115,11 @@ function tb_show(caption, url, imageGroup, pos) {
 				imgPreloader.onload = null;
 
 				// Resizing large images - orginal by Christian Montoya edited by me.
-				var pagesize = tb_getPageSize();
-				var x = pagesize[0] - 150;
-				var y = pagesize[1] - 150;
-				var imageWidth = imgPreloader.width;
-				var imageHeight = imgPreloader.height;
+				var pagesize = tb_getPageSize(),
+					x = pagesize[0] - 150,
+					y = pagesize[1] - 150,
+					imageWidth = imgPreloader.width,
+					imageHeight = imgPreloader.height;
 				if (imageWidth > x) {
 					imageHeight = imageHeight * (x / imageWidth);
 					imageWidth = x;
@@ -137,47 +139,49 @@ function tb_show(caption, url, imageGroup, pos) {
 
 				TB_WIDTH = imageWidth + 30;
 				TB_HEIGHT = imageHeight + 60;
-				$("#TB_window").append("<a href='' id='TB_ImageOff' title='fechar'><img id='TB_Image' src='"+url+"' width='"+imageWidth+"' height='"+imageHeight+"' alt='"+caption+"'/></a>" + "<div id='TB_caption'>"+caption+"<div id='TB_secondLine'>" + TB_imageCount + TB_PrevHTML + TB_NextHTML + "</div></div><div id='TB_closeWindow'><a href='#' id='TB_closeWindowButton' title='fechar'>fechar</a></div>");
+				$("#TB_window").append("<a href='' id='TB_ImageOff' title='fechar'><img id='TB_Image' src='" + url + "' width='" + imageWidth + "' height='" + imageHeight + "' alt='" + caption + "'/></a>" + "<div id='TB_caption'>" + caption + "<div id='TB_secondLine'>" + TB_imageCount + TB_PrevHTML + TB_NextHTML + "</div></div><div id='TB_closeWindow'><a href='#' id='TB_closeWindowButton' title='fechar'>fechar</a></div>");
 
 				$("#TB_closeWindowButton").click(tb_remove);
 
 
 				if (!(TB_PrevHTML === "")) {
-					function goPrev () {
-						if($(document).unbind("click",goPrev)){$(document).unbind("click",goPrev);}
+					goPrev = function () {
+						if ($(document).unbind("click", goPrev)) {
+							$(document).unbind("click", goPrev);
+						}
 						$("#TB_window").remove();
 						$("body").append("<div id='TB_window'></div>");
 						tb_show(TB_PrevCaption, TB_PrevURL, imageGroup);
 						return false;
-					}
+					};
 					$("#TB_prev").click(goPrev);
 				}
 
 				if (!(TB_NextHTML === "")) {
-					function goNext () {
+					goNext = function () {
 						$("#TB_window").remove();
 						$("body").append("<div id='TB_window'></div>");
 						tb_show(TB_NextCaption, TB_NextURL, imageGroup);
 						return false;
-					}
+					};
 					$("#TB_next").click(goNext);
 				}
 
-				document.onkeydown = function(e) {
-					if (e == null) { // ie
+				document.onkeydown = function (e) {
+					if (e === null) { // ie
 						keycode = event.keyCode;
 					} else { // mozilla
 						keycode = e.which;
 					}
-					if (keycode == 27) { // close
+					if (keycode === 27) { // close
 						tb_remove();
-					} else if (keycode == 190) { // display previous image
-						if (!(TB_NextHTML == "")) {
+					} else if (keycode === 190) { // display previous image
+						if (!(TB_NextHTML === "")) {
 							document.onkeydown = "";
 							goNext();
 						}
-					} else if (keycode == 188) { // display next image
-						if (!(TB_PrevHTML == "")) {
+					} else if (keycode === 188) { // display next image
+						if (!(TB_PrevHTML === "")) {
 							document.onkeydown = "";
 							goPrev();
 						}
@@ -195,23 +199,23 @@ function tb_show(caption, url, imageGroup, pos) {
 				var params = tb_parseQuery( queryString );
 				TB_PARAMS = params;
 
-				TB_WIDTH = (params['width']*1) + 30 || 630; //defaults to 630 if no paramaters were added to URL
-				TB_HEIGHT = (params['height']*1) + 40 || 440; //defaults to 440 if no paramaters were added to URL
+				TB_WIDTH = (params.width * 1) + 30 || 630; //defaults to 630 if no paramaters were added to URL
+				TB_HEIGHT = (params.height * 1) + 40 || 440; //defaults to 440 if no paramaters were added to URL
 				ajaxContentW = TB_WIDTH - 30;
 				ajaxContentH = TB_HEIGHT - 45;
 
-				if (url.indexOf('TB_iframe') != -1) {// either iframe or ajax window
+				if (url.indexOf('TB_iframe') !== -1) {// either iframe or ajax window
 					urlNoQuery = url.split('&TB_');
 					$("#TB_iframeContent").remove();
-					if (params['modal'] != "true") {//iframe no modal
+					if (params.modal !== "true") {//iframe no modal
 						$("#TB_window").append("<div id='TB_title'><div id='TB_ajaxWindowTitle'>"+caption+"</div><div id='TB_closeAjaxWindow'><a href='#' id='TB_closeWindowButton' title='fechar'>fechar</a></div></div><iframe frameborder='0' hspace='0' src='"+urlNoQuery[0]+"' id='TB_iframeContent'  onload='tb_showIframe()' name='TB_iframeContent"+Math.round(Math.random()*1000)+"' style='width:"+(ajaxContentW + 29)+"px;height:"+(ajaxContentH + 17)+"px;' > </iframe>");
 					} else {//iframe modal
 						$("#TB_overlay").unbind();
 						$("#TB_window").append("<iframe frameborder='0' hspace='0' src='"+urlNoQuery[0]+"' id='TB_iframeContent' name='TB_iframeContent"+Math.round(Math.random()*1000)+"' onload='tb_showIframe()' style='width:"+(ajaxContentW + 29)+"px;height:"+(ajaxContentH + 17)+"px;'> </iframe>");
 					}
 				} else {// not an iframe, ajax
-					if ($("#TB_window").css("display") != "block") {
-						if (params['modal'] != "true") {//ajax no modal
+					if ($("#TB_window").css("display") !== "block") {
+						if (params.modal !== "true") {//ajax no modal
 							$("#TB_window").append("<div id='TB_title'><div id='TB_ajaxWindowTitle'>"+caption+"</div><div id='TB_closeAjaxWindow'><a href='#' id='TB_closeWindowButton' title='fechar'>fechar</a></div></div><div id='TB_ajaxContent' style='width:"+ajaxContentW+"px;height:"+ajaxContentH+"px'></div>");
 						} else {//ajax modal
 							$("#TB_overlay").unbind();
@@ -227,23 +231,23 @@ function tb_show(caption, url, imageGroup, pos) {
 
 				$("#TB_closeWindowButton").click(tb_remove);
 
-				if (url.indexOf('TB_inline') != -1) {
-					$("#TB_ajaxContent").append($('#' + params['inlineId']).children());
+				if (url.indexOf('TB_inline') !== -1) {
+					$("#TB_ajaxContent").append($('#' + params.inlineId).children());
 					$("#TB_window").unload(function () {
-						$('#' + params['inlineId']).append( $("#TB_ajaxContent").children() ); // move elements back when you're finished
+						$('#' + params.inlineId).append( $("#TB_ajaxContent").children() ); // move elements back when you're finished
 					});
 
 					tb_position(pos);
 					$("#TB_load").remove();
 					$("#TB_window").css({display:"block"});
-				} else if (url.indexOf('TB_iframe') != -1){
+				} else if (url.indexOf('TB_iframe') !== -1){
 					tb_position(pos);
 					if ($.browser.safari) {//safari needs help because it will not fire iframe onload
 						$("#TB_load").remove();
 						$("#TB_window").css({display:"block"});
 					}
 				} else {
-					$("#TB_ajaxContent").load(url += "&random=" + (new Date().getTime()),function(){//to do a post change this load method
+					$("#TB_ajaxContent").load(url += "&random=" + (new Date().getTime()),function () {//to do a post change this load method
 						tb_position(pos);
 						$("#TB_load").remove();
 						tb_init("#TB_ajaxContent a.thickbox");
@@ -252,14 +256,14 @@ function tb_show(caption, url, imageGroup, pos) {
 				}
 		}
 
-			if (!params['modal']) {
+			if (!params.modal) {
 				document.onkeyup = function(e) {
-					if (e == null) { // ie
+					if (e === null) { // ie
 						keycode = event.keyCode;
 					} else { // mozilla
 						keycode = e.which;
 					}
-					if (keycode == 27) { // close
+					if (keycode === 27) { // close
 						tb_remove();
 					}
 				};
@@ -291,7 +295,7 @@ function tb_remove(callback) {
 	document.onkeydown = "";
 	document.onkeyup = "";
 	//hack
-	if (typeof document.body.style.maxHeight == "undefined") {//if IE 6
+	if (typeof document.body.style.maxHeight === "undefined") {//if IE 6
 		$("html").css("overflow", "");
 	}
 
@@ -367,12 +371,7 @@ function tb_position(p) {
 			$("#TB_window").css({/*marginTop: '-' + parseInt((TB_HEIGHT / 2),10) + 'px',*/ top:pos +'px'});
 		} else {
 			$("#TB_window").css({marginTop: '-' + parseInt((TB_HEIGHT / 2),10) + 'px'});
-		};
-
-
-			// $('html, body').animate({
-			//     scrollTop: $("#wrapper").offset().top
-			// }, 500);
+		}
 	}
 }
 
@@ -383,8 +382,8 @@ function tb_parseQuery (query) {
 	for (var i = 0; i < Pairs.length; i++) {
 		var KeyVal = Pairs[i].split('=');
 		if (! KeyVal || KeyVal.length != 2) {continue;}
-		var key = unescape( KeyVal[0] );
-		var val = unescape( KeyVal[1] );
+		var key = unescape( KeyVal[0] ),
+			val = unescape( KeyVal[1] );
 		val = val.replace(/\+/g, ' ');
 		Params[key] = val;
 	}
